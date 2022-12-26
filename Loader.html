@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Loader after data</title>
+        <style>
+body
+{
+  margin:0;
+  padding:0;
+  /* background:#262626; */
+}
+.ring
+{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:150px;
+  height:150px;
+  background:transparent;
+  border:3px solid #3c3c3c;
+  border-radius:50%;
+  text-align:center;
+  line-height:150px;
+  font-family:sans-serif;
+  font-size:20px;
+  color:black;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  text-shadow:0 0 10px #fff000;
+  box-shadow:0 0 20px rgba(0,0,0,.5);
+  --duration: 1.5s;
+}
+.ring:before
+{
+  content:'';
+  position:absolute;
+  top:-3px;
+  left:-3px;
+  width:100%;
+  height:100%;
+  border:3px solid transparent;
+  border-top:3px solid #fff000;
+  border-right:3px solid #fff000;
+  border-radius:50%;
+  animation:animateC 2s linear infinite;
+}
+span
+{
+  display:block;
+  position:absolute;
+  top:calc(50% - 2px);
+  left:50%;
+  width:50%;
+  height:4px;
+  background:transparent;
+  transform-origin:left;
+  animation:animate 2s linear infinite;
+}
+span:before
+{
+  content:'';
+  position:absolute;
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  background:#fff000;
+  top:-6px;
+  right:-8px;
+  box-shadow:0 0 20px #fff000;
+}
+@keyframes animateC
+{
+  0%
+  {
+    transform:rotate(0deg);
+  }
+  100%
+  {
+    transform:rotate(360deg);
+  }
+}
+@keyframes animate
+{
+  0%
+  {
+    transform:rotate(45deg);
+  }
+  100%
+  {
+    transform:rotate(405deg);
+  }
+}
+table,
+td,
+th {
+    border: 1px solid;
+    
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+h1{
+    text-align: center;
+    color:black;
+    --duration: 1.5s;
+
+}
+        </style>
+    </head>
+    <body>
+        <h1>Prodecuts Details</h1>
+        <table id="customers">
+            <thead style="background-color: grey;" >
+                <tr id="head">
+
+                </tr>
+            </thead>
+            <tbody id="body">
+    
+            </tbody>
+        </table>
+        <div class="ring" id="myLoader">Loading
+            <span></span>
+          </div>
+    </body>
+    <script>
+        fetch("https://jsonplaceholder.typicode.com/posts").then(y => y.json())
+    .then(myJson => display(myJson));
+
+let myArray = [];
+let dkey = [];
+display = (data) => {
+    myArray = data;
+
+    let kay = Object.keys(myArray[0]);
+    dkey = kay;
+    let printKey = kay.map((val, index) => {
+        return `
+        <tr>
+        <th>${val}</th>
+        </tr>
+        `
+    });
+
+    let printData = myArray.map((value) => {
+        return `<tr>
+        <td>${value.userId}</td>
+        <td>${value.id}</td>
+        <td>${value.title}</td>
+        <td>${value.body}</td>
+        </tr>`
+    })
+
+    try {
+        document.getElementById('myLoader').style.display = "block";
+
+        setTimeout(() => {
+            document.getElementById('myLoader').style.display = "none";
+        }, 5000)
+    }
+    finally {
+
+        setTimeout(() => {
+            document.getElementById('head').innerHTML = printKey.join(' ');
+            document.getElementById('body').innerHTML = printData.join(' ');
+        },5000);
+    }
+}
+
+
+
+
+    </script>
+</html>
